@@ -8,8 +8,9 @@ c.retrieve(
         'product_type': 'reanalysis',
         'format': 'netcdf',
         'variable': [
-            'convective_available_potential_energy',
-            'mean_total_precipitation_rate',
+            '2m_dewpoint_temperature', '2m_temperature',
+            'instantaneous_10m_wind_gust', 'mean_surface_downward_short_wave_radiation_flux',
+            'surface_pressure',
         ],
         'year': '2005',
         'month': [
