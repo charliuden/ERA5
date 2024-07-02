@@ -11,7 +11,7 @@ c.retrieve(
             'convective_available_potential_energy',
             'mean_total_precipitation_rate',
         ],
-        'year': '2005',
+        'year': '2010',
         'month': [
             '01', '02', '03',
             '04', '05', '06',
@@ -46,4 +46,4 @@ c.retrieve(
             '21:00', '22:00', '23:00',
         ],
     },
-    'era5_precip_CAPE_2005.nc')
+    'era5_precip_CAPE_2010.nc')
