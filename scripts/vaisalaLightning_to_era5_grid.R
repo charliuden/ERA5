@@ -1,7 +1,7 @@
 #------------------------------
 #RASTER METHOD
 #------------------------------
-#June 28th 2023
+#July 26th 2024
 
 #Script to aggregate Vaisala lightning strike data to PalEON data
 

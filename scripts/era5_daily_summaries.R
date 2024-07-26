@@ -5,6 +5,10 @@ library(raster)
 library(sp)
 library(patchwork)
 
+#July 26th 2024
+#script to get hourly era5 data to daily timestep. 
+#ended up making a python scrip - see era5_daily_summaries.py
+
 setwd("/raid/cuden/data")
 df <- read.csv("/raid/cuden/data/era5_2005-2010.csv")
 
@@ -52,14 +56,17 @@ longitudes <- unique(df$lon)
 latitudes <- unique(df$lat)
 
 for(i in seq(1:length(dates))){
-  date <- dates[i]
-  dat <- filter(df, date == i)
+  i=1
+  date_i <- dates[i]
+  dat <- filter(df, date == as.Date(date_i))
   for(j in seq(1:length(longitudes))){
-    lon <- longitudes[j]
-    dat <- filter(dat, lon == j)
+    j=1
+    lon_j <- longitudes[j]
+    dat <- filter(dat, lon == lon_j)
     for(k in seq(1:length(latitudes))){
-      lat <- latitudes[k]
-      dat <- filter(dat, lat == k)
+      k=1
+      lat_k <- latitudes[k]
+      dat <- filter(dat, lat == lat_k)
       cape <- mean(dat$cape)
       mtpr <- mean(dat$mtpr)
       summary_loop <- rbind(summary_loop, c(i, j, k, cape, mtpr))
@@ -68,9 +75,6 @@ for(i in seq(1:length(dates))){
 }
 
 str(summary_loop)
-
-
-
 
 #check the data make sense
 str(summary_cape)
@@ -120,36 +124,31 @@ filter(df_means, date=='2007-01-01' & lon==-80.00 & lat==48.00)$mtpr
 
 
 #Map the data to check that it worked:
-library(maps)
-library(mapdata)
-
-df_means <- read.csv("/raid/cuden/data/era5_2005-2010_cape_mtpr_dailyMeans.csv")[,2:6]
-df_means[,c("date")] <- as.Date(df_means[,c("date")])
-str(df_means)
-
-#map the points
-states <- map_data("state")#turn state line map into data frame
-new_england <- subset(states, region %in% c("vermont", "new hampshire", "connecticut", "maine", "rhode island", "massachusetts", "new york"))#subest ne$
-map <- ggplot() + geom_polygon(data = new_england, aes(x=long, y=lat, group = group), color="white", fill="lightgray") + coord_fixed(1.3)
-
-p <- filter(df_means, date==as.Date("2008-11-01"))
-point <- map + geom_point(data=p, aes(x=lon, y=lat, alpha=cape_mean)) 
-point
-
 
 library(raster)
 library(sp)
 library(patchwork)
+library(ggplot2)
 
-r <- df_means
-r <- filter(df_means, date=="2005-06-01")
+#base map for testing that the data make sense: 
+states <- map_data("state")#turn state line map into data frame
+new_england <- subset(states, region %in% c("vermont", "new hampshire", "connecticut", "maine", "rhode island", "massachusetts", "new york"))#subest ne$
+map <- ggplot() + geom_polygon(data = new_england, aes(x=long, y=lat, group = group), color="white", fill="lightgray") + coord_fixed(1.3)
+
+
+df <- read.csv("/raid/cuden/data/era5_cape_precip_2005-2010_dailyMeans.csv")
+df$date <- as.Date(df$date)
+df_day <- filter(df, date=="2005-06-01")
+
+#map as raster
+r <- df_day
 r <- r[,1:3]
-#r <- rasterFromXYZ(r)
+r <- rasterFromXYZ(r)
 #plot(r)
-raster <- map + geom_tile(data=r, aes(x=lon, y=lat, fill=strikes, alpha=0.5)) +
+map + geom_tile(data=r, aes(x=longitude, y=latitude, fill=cape, alpha=0.5)) +
   scale_fill_gradient(low="#FFFFFF", high="#0033FF") +
-  ggtitle("2004-06-01") +
   guides(alpha = FALSE)
 
-
+#map the points
+ggplot() + geom_point(data=df_day, aes(x=longitude, y=latitude, col=cape)) 
 

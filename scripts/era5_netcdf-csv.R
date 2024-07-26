@@ -3,6 +3,11 @@ library(dplyr)
 library(ggplot2)
 library(eurocordexr)
 
+#July 26th 2024
+#Script to extract netcdf data a write it to a csv file. 
+#expand.grid() function could not handle the size of the data
+#ended up using a python library. see era5-netcdf-csv.py
+
 setwd("/raid/cuden/data")
 
 #get variable
@@ -15,14 +20,15 @@ var <- ncvar_get(nc, var)
 lat <- ncvar_get(nc, 'latitude')
 lon <- ncvar_get(nc, 'longitude')
 time <- ncvar_get(nc, 'time')
+time <- as.POSIXct("1900-01-01 00:00:00") + as.difftime(time, units="hours")
+#date <- as.Date(time[1:5], origin="1900-01-01 00:00:00.0")
+coords <- as.matrix(expand.grid(lon, lat, var, time))
 
 #get grid
 grid <- expand.grid(lon=lon, lat=lat)
 plot(grid)
 #write.csv(grid, "/raid/cuden/data/era5_grid.csv")
 
-time <- as.POSIXct("1900-01-01 00:00:00") + as.difftime(time, units="hours")
-#date <- as.Date(time[1:5], origin="1900-01-01 00:00:00.0")
 
 get_nc_data <- function(file_path=x, var_name=y) {
   #file_path="file_path"
@@ -109,5 +115,30 @@ map + geom_point(data=p, aes(x=lon, y=lat))
 
 
 
+summary_loop <- data.frame(matrix(nrow=0, ncol=5))
+colnames(summary_loop) <- c("lon", "lat", "date", "cape_mean", "mtpr_mean")
 
+#loop through days
+dates <- seq(as.Date("2005-01-01"), as.Date("2010-12-31"), by="days")
+longitudes <- unique(df$lon)
+latitudes <- unique(df$lat)
+
+for(i in seq(1:length(dates))){
+  i=1
+  date_i <- dates[i]
+  dat <- filter(precip2005, date == as.Date(date_i))
+  for(j in seq(1:length(longitudes))){
+    j=1
+    lon_j <- longitudes[j]
+    dat <- filter(dat, lon == lon_j)
+    for(k in seq(1:length(latitudes))){
+      k=1
+      lat_k <- latitudes[k]
+      dat <- filter(dat, lat == lat_k)
+      cape <- mean(dat$cape)
+      mtpr <- mean(dat$mtpr)
+      summary_loop <- rbind(summary_loop, c(i, j, k, cape, mtpr))
+    }
+  }
+}
 
