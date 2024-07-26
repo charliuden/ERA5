@@ -16,14 +16,16 @@ library(sp)
 library(ggplot2)
 library(patchwork)
 
+setwd("/raid/cuden/data")
 
-#get paleon grid 
-grid <- read.csv("/users/c/u/cuden/PalEON/PalEONgrid_NEclip.csv")
+#get era5 grid 
+grid <- read.csv("era5_grid.csv")[,2:3]
 head(grid)
 plot(grid$lon, grid$lat)
 
 #assign index value to grid cells 
 grid <- cbind(grid, index=seq(1:nrow(grid)))
+head(grid)
 #use paleon grid to make spatial object, then raster
 r <- grid
 #coordinates(r) <- ~ lon + lat 
@@ -39,9 +41,8 @@ plot(r)
 points(p)
 
 #get lightning data
-data <- read.csv("/Users/charlotteuden/Desktop/trees/data/modernFires/vaisala_lightning_2004-2010/2004-2010_vaisala_lightning.csv")
-data <- data[,2:4]
-colnames(data) <- c("date", "lat", "lon")
+data <- read.csv("vaisala_2004-2010.csv")
+data <- data[,c("date", "lat", "lon")]
 data$date <- as.Date(data$date)
 str(data)
 
@@ -62,7 +63,7 @@ lightningStrikes <- data.frame(matrix(nrow=0, ncol=4))
 colnames(lightningStrikes) <- c("x", "y", "layer", "date")
 
 #loop through days
-dates <- seq(as.Date("2004-01-01"), as.Date("2009-12-31"), by="days")
+dates <- seq(as.Date("2004-01-01"), as.Date("2010-12-31"), by="days")
 #dates <- seq(as.Date("2004-06-01"), as.Date("2004-06-25"), by="days")
 #dates <- as.Date("2004-06-01")
 
@@ -123,10 +124,10 @@ point <- map + geom_point(data=p, aes(x=lon, y=lat, alpha=0.1)) +
   ggtitle("2004-06-01") +
   guides(alpha = FALSE)
 
-point | raster
+(point + raster)
 
 #write to csv
-#write.csv(lightningStrikes, "/Users/charlotteuden/Desktop/trees/data/modernFires/vaisala_lightning_2004-2010/2004-2009_vaisala_lightning_paleonGrid.cs$
+#write.csv(lightningStrikes, "/raid/cuden/data/2004-20010_vaisala_lightning_era5Grid.csv")
 
 
 
