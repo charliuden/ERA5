@@ -127,7 +127,7 @@ point <- map + geom_point(data=p, aes(x=lon, y=lat, alpha=0.1)) +
 (point + raster)
 
 #write to csv
-#write.csv(lightningStrikes, "/raid/cuden/data/2004-20010_vaisala_lightning_era5Grid.csv")
+write.csv(lightningStrikes, "/raid/cuden/data/2004-20010_vaisala_lightning_era5Grid.csv")
 
 
 
