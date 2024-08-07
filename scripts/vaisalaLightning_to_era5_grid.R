@@ -34,7 +34,7 @@ r <- rasterFromXYZ(r)
 #values(r) <- runif(ncell(r))
 crs(r) <- CRS("+proj=longlat +datum=WGS84")
 
-#view point grid over raster - must use line 18 to view the raster
+#view point grid over raster
 p <- grid
 coordinates(p) <- ~ lon + lat
 plot(r)
