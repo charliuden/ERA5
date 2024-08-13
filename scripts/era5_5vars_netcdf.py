@@ -12,7 +12,7 @@ c.retrieve(
             'instantaneous_10m_wind_gust', 'mean_surface_downward_short_wave_radiation_flux',
             'surface_pressure',
         ],
-        'year': '2009',
+        'year': '2010',
         'month': [
             '01', '02', '03',
             '04', '05', '06',
@@ -47,4 +47,4 @@ c.retrieve(
             '21:00', '22:00', '23:00',
         ],
     },
-    'era5_d2m_t2m_i10fg_msdwswrf_sp_2009.nc')
+    'era5_d2m_t2m_i10fg_msdwswrf_sp_2010.nc')

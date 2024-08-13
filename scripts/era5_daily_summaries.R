@@ -120,9 +120,6 @@ filter(df_means, date=='2007-01-01' & lon==-80.00 & lat==48.00)$mtpr
 
 #write.csv(df_means, "/raid/cuden/data/era5_2005-2010_cape_mtpr_dailyMeans.csv")
 
-
-
-
 #Map the data to check that it worked:
 
 library(raster)
