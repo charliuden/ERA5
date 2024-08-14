@@ -12,6 +12,7 @@ library(patchwork)
 setwd("/raid/cuden/data")
 df <- read.csv("/raid/cuden/data/era5_2005-2010.csv")
 
+
 #change time column from date AND time, to just date
 df$time_test <- as.POSIXct(df$time, format="%Y-%m-%d %H:%M:%S")
 df$date <- as.Date(df$time, origin="1900-01-01 00:00:00")
@@ -119,6 +120,62 @@ mean(filter(df, date=='2007-01-01' & lon==-80.00 & lat==48.00)$mtpr)
 filter(df_means, date=='2007-01-01' & lon==-80.00 & lat==48.00)$mtpr
 
 #write.csv(df_means, "/raid/cuden/data/era5_2005-2010_cape_mtpr_dailyMeans.csv")
+
+#---- dew point temp (d2m), temperature (t2m), wind (i10fg), short wave radiation (msdwswrf), surface air pressure (sp)-----
+
+setwd("/raid/cuden/data")
+df <- read.csv("/raid/cuden/data/era5_hourly_d2m_t2m_i10fg_msdwswrf_sp_2005-2010.csv")
+
+df$date <- as.POSIXct(df$time, format="%Y-%m-%d %H:%M:%S")
+df$date <- as.Date(df$date)
+str(df)
+
+#columns to group by:
+cols <- c("date","lon","lat")
+
+summary_d2m <- df %>% 
+  group_by(across(all_of(cols))) %>% 
+  summarize(d2m = mean(d2m), .groups = 'drop')
+
+summary_t2m <- df %>% 
+  group_by(across(all_of(cols))) %>% 
+  summarize(t2m = mean(t2m), .groups = 'drop')
+
+summary_tmin <- df %>% 
+  group_by(across(all_of(cols))) %>% 
+  summarize(tmin = min(t2m), .groups = 'drop')
+
+summary_tmax <- df %>% 
+  group_by(across(all_of(cols))) %>% 
+  summarize(tmax = max(t2m), .groups = 'drop')
+
+summary_i10fg <- df %>% 
+  group_by(across(all_of(cols))) %>% 
+  summarize(i10fg = mean(i10fg), .groups = 'drop')
+
+summary_msdwswrf <- df %>% 
+  group_by(across(all_of(cols))) %>% 
+  summarize(msdwswrf = mean(msdwswrf), .groups = 'drop')
+
+summary_sp <- df %>% 
+  group_by(across(all_of(cols))) %>% 
+  summarize(sp = mean(sp), .groups = 'drop')
+
+identical(summary_d2m[['lon']],summary_t2m[['lon']])
+identical(summary_d2m[['lat']],summary_t2m[['lat']])
+identical(summary_d2m[['date']],summary_t2m[['date']])
+
+df_summaries <- cbind(summary_d2m, 
+                  t2m=summary_t2m[['t2m']],
+                  tmin=summary_tmin[['tmin']],
+                  tmin=summary_tmin[['tmin']],
+                  i10fg=summary_i10fg[['i10fg']],
+                  msdwswrf=summary_msdwswrf[['msdwswrf']],
+                  sp=summary_sp[['sp']])
+
+str(df_summaries)
+
+write.csv(df_summaries, "/raid/cuden/data/era5_2005-2010_d2m_t2m_min_tmax_i10fg_msdwswrf_sp_dailySummaries.csv")
 
 #Map the data to check that it worked:
 

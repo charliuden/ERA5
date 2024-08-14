@@ -11,8 +11,8 @@ library(eurocordexr)
 setwd("/raid/cuden/data")
 
 #get variable
-file <- 'era5_precip_CAPE_2005.nc'
-var <- 'mtpr'
+file <- 'era5_d2m_t2m_i10fg_msdwswrf_sp_2005.nc'
+var <- 'msdwswrf'
 
 nc <- nc_open(file)
 
@@ -47,50 +47,103 @@ get_nc_data <- function(file_path=x, var_name=y) {
   return(dat)
 }
 
-precip2005 <- get_nc_data(file_path='era5_precip_CAPE_2005.nc', var_name='mtpr')
-cape_2005 <- get_nc_data(file_path = 'era5_precip_CAPE_2005.nc', var_name = 'cape')
-#to avoid using merge() (whcih takes a long time) use identical() function to 
-#check that dataframe columns are the same
-df2005 <- cbind(precip2005, cape=cape_2005[['cape']])
+#2005
+d2m <- get_nc_data(file_path='era5_d2m_t2m_i10fg_msdwswrf_sp_2005.nc', var_name='d2m')
+t2m <- get_nc_data(file_path='era5_d2m_t2m_i10fg_msdwswrf_sp_2005.nc', var_name='t2m')
+i10fg <- get_nc_data(file_path='era5_d2m_t2m_i10fg_msdwswrf_sp_2005.nc', var_name='i10fg')
+msdwswrf <- get_nc_data(file_path='era5_d2m_t2m_i10fg_msdwswrf_sp_2005.nc', var_name='msdwswrf')
+sp <- get_nc_data(file_path='era5_d2m_t2m_i10fg_msdwswrf_sp_2005.nc', var_name='sp')
+#to avoid using merge() (which takes a long time) use identical() function to 
+#check that data frame columns are the same
+df2005 <- cbind(d2m, 
+                t2m=t2m[['t2m']], 
+                i10fg=i10fg[['i10fg']], 
+                msdwswrf=msdwswrf[['msdwswrf']],
+                sp=sp[['sp']])
 head(df2005)
 
-precip2006 <- get_nc_data(file_path='era5_precip_CAPE_2006.nc', var_name='mtpr')
-cape_2006 <- get_nc_data(file_path = 'era5_precip_CAPE_2006.nc', var_name = 'cape')
-df2006 <- cbind(precip2006, cape=cape_2006[['cape']])
+#2006
+d2m <- get_nc_data(file_path='era5_d2m_t2m_i10fg_msdwswrf_sp_2006.nc', var_name='d2m')
+t2m <- get_nc_data(file_path='era5_d2m_t2m_i10fg_msdwswrf_sp_2006.nc', var_name='t2m')
+i10fg <- get_nc_data(file_path='era5_d2m_t2m_i10fg_msdwswrf_sp_2006.nc', var_name='i10fg')
+msdwswrf <- get_nc_data(file_path='era5_d2m_t2m_i10fg_msdwswrf_sp_2006.nc', var_name='msdwswrf')
+sp <- get_nc_data(file_path='era5_d2m_t2m_i10fg_msdwswrf_sp_2006.nc', var_name='sp')
+
+df2006 <- cbind(d2m, 
+                t2m=t2m[['t2m']], 
+                i10fg=i10fg[['i10fg']], 
+                msdwswrf=msdwswrf[['msdwswrf']],
+                sp=sp[['sp']])
 head(df2006)
 
 df <- rbind(df2005, df2006)
 
-precip2007 <- get_nc_data(file_path='era5_precip_CAPE_2007.nc', var_name='mtpr')
-cape_2007 <- get_nc_data(file_path = 'era5_precip_CAPE_2007.nc', var_name = 'cape')
-df2007 <- cbind(precip2007, cape=cape_2007[['cape']])
+#2007
+d2m <- get_nc_data(file_path='era5_d2m_t2m_i10fg_msdwswrf_sp_2007.nc', var_name='d2m')
+t2m <- get_nc_data(file_path='era5_d2m_t2m_i10fg_msdwswrf_sp_2007.nc', var_name='t2m')
+i10fg <- get_nc_data(file_path='era5_d2m_t2m_i10fg_msdwswrf_sp_2007.nc', var_name='i10fg')
+msdwswrf <- get_nc_data(file_path='era5_d2m_t2m_i10fg_msdwswrf_sp_2007.nc', var_name='msdwswrf')
+sp <- get_nc_data(file_path='era5_d2m_t2m_i10fg_msdwswrf_sp_2007.nc', var_name='sp')
+
+df2007 <- cbind(d2m, 
+                t2m=t2m[['t2m']], 
+                i10fg=i10fg[['i10fg']], 
+                msdwswrf=msdwswrf[['msdwswrf']],
+                sp=sp[['sp']])
 head(df2007)
 
 df <- rbind(df, df2007)
 
-precip2008 <- get_nc_data(file_path='era5_precip_CAPE_2008.nc', var_name='mtpr')
-cape_2008 <- get_nc_data(file_path = 'era5_precip_CAPE_2008.nc', var_name = 'cape')
-df2008 <- cbind(precip2008, cape=cape_2008[['cape']])
+#2008
+d2m <- get_nc_data(file_path='era5_d2m_t2m_i10fg_msdwswrf_sp_2008.nc', var_name='d2m')
+t2m <- get_nc_data(file_path='era5_d2m_t2m_i10fg_msdwswrf_sp_2008.nc', var_name='t2m')
+i10fg <- get_nc_data(file_path='era5_d2m_t2m_i10fg_msdwswrf_sp_2008.nc', var_name='i10fg')
+msdwswrf <- get_nc_data(file_path='era5_d2m_t2m_i10fg_msdwswrf_sp_2008.nc', var_name='msdwswrf')
+sp <- get_nc_data(file_path='era5_d2m_t2m_i10fg_msdwswrf_sp_2008.nc', var_name='sp')
+
+df2008 <- cbind(d2m, 
+                t2m=t2m[['t2m']], 
+                i10fg=i10fg[['i10fg']], 
+                msdwswrf=msdwswrf[['msdwswrf']],
+                sp=sp[['sp']])
 head(df2008)
 
 df <- rbind(df, df2008)
 
-precip2009 <- get_nc_data(file_path='era5_precip_CAPE_2009.nc', var_name='mtpr')
-cape_2009 <- get_nc_data(file_path = 'era5_precip_CAPE_2009.nc', var_name = 'cape')
-df2009 <- cbind(precip2009, cape=cape_2009[['cape']])
+#2009
+d2m <- get_nc_data(file_path='era5_d2m_t2m_i10fg_msdwswrf_sp_2009.nc', var_name='d2m')
+t2m <- get_nc_data(file_path='era5_d2m_t2m_i10fg_msdwswrf_sp_2009.nc', var_name='t2m')
+i10fg <- get_nc_data(file_path='era5_d2m_t2m_i10fg_msdwswrf_sp_2009.nc', var_name='i10fg')
+msdwswrf <- get_nc_data(file_path='era5_d2m_t2m_i10fg_msdwswrf_sp_2009.nc', var_name='msdwswrf')
+sp <- get_nc_data(file_path='era5_d2m_t2m_i10fg_msdwswrf_sp_2009.nc', var_name='sp')
+
+df2009 <- cbind(d2m, 
+                t2m=t2m[['t2m']], 
+                i10fg=i10fg[['i10fg']], 
+                msdwswrf=msdwswrf[['msdwswrf']],
+                sp=sp[['sp']])
 head(df2009)
 
 df <- rbind(df, df2009)
 
-precip2010 <- get_nc_data(file_path='era5_precip_CAPE_2010.nc', var_name='mtpr')
-cape_2010 <- get_nc_data(file_path = 'era5_precip_CAPE_2010.nc', var_name = 'cape')
-df2010 <- cbind(precip2010, cape=cape_2010[['cape']])
+#2010
+d2m <- get_nc_data(file_path='era5_d2m_t2m_i10fg_msdwswrf_sp_2010.nc', var_name='d2m')
+t2m <- get_nc_data(file_path='era5_d2m_t2m_i10fg_msdwswrf_sp_2010.nc', var_name='t2m')
+i10fg <- get_nc_data(file_path='era5_d2m_t2m_i10fg_msdwswrf_sp_2010.nc', var_name='i10fg')
+msdwswrf <- get_nc_data(file_path='era5_d2m_t2m_i10fg_msdwswrf_sp_2010.nc', var_name='msdwswrf')
+sp <- get_nc_data(file_path='era5_d2m_t2m_i10fg_msdwswrf_sp_2010.nc', var_name='sp')
+
+df2010 <- cbind(d2m, 
+                t2m=t2m[['t2m']], 
+                i10fg=i10fg[['i10fg']], 
+                msdwswrf=msdwswrf[['msdwswrf']],
+                sp=sp[['sp']])
 head(df2010)
 
 df <- rbind(df, df2010)
 head(df)
 
-#write.csv(df, "/raid/cuden/data/era5_2005-2010.csv")
+#write.csv(df, "/raid/cuden/data/era5_hourly_d2m_t2m_i10fg_msdwswrf_sp_2005-2010.csv")
 min(df$time)
 max(df$time)
 
