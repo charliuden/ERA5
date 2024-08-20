@@ -8,3 +8,19 @@ Scripts for downloading and processing ERA5 data
 4. lightning_era5_merge.R - merge daily lightning counts with era5 data
 5. era5_lightning_NEclip.R - clip data to the Northeast US
 6. era5_monthly_summaries.R - daily to monthly summaries
+
+### Varaibles
+ERA5 hourly data are downloaded from: https://cds.climate.copernicus.eu/cdsapp#!/dataset/reanalysis-era5-single-levels?tab=form
+The data area on a 0.25 degree by 0.25 degree rectangular grid (48, -80, 40, -66) from 2005-01-01 to 2010-12-31. 
+Variables include:
+- d2m: 2 metre dewpoint temperature in K
+- t2m: 2 metre temperature in K
+- i10fg: Instantaneous 10 metre wind gust in m s**-1
+- msdwswrf: Mean surface downward short-wave radiation flux in W m**-2
+- sp: Surface pressure in Pa
+- cape: Convective available potential energy in J kg**-1
+- mtpr: Mean total precipitation rate inkg m**-2 s**-1
+
+
+
+
