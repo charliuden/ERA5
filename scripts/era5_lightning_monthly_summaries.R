@@ -1,31 +1,20 @@
 #Charlotte Uden
 #August 12 2024
 
-#1. Calculate relative humidity
-#2. calculate lightning flash rate (HOURLY) (km-2 hour-1) from gridcell area and number of strikes per day per gridcell
-#3. calculate lightning flash rate (MONTHLY) (km-2 month-1) from gridcell area and number of strikes per day per gridcell
+#1. calculate lightning flash rate (HOURLY) (km-2 hour-1) from gridcell area and number of strikes per day per gridcell
+#2. calculate lightning flash rate (MONTHLY) (km-2 month-1) from gridcell area and number of strikes per day per gridcell
 
 
 
 df <- read.csv("/raid/cuden/data/era5DailySummaries_vaisalaLightningDailyCounts_2005-2010_NEclip.csv")
-df <- df[,2:15]
+head(df)
+df <- df[,2:16]
 
 library(ggplot2)
 library(dplyr)
 library(terra)
 
-#-----1. Calculate Relative Humidity from temperature (t2m) and dew point temperature (d2m) -----
-
-beta <-  17.625
-gamma <- 243.04 #degrees Celsius
-
-#formula:
-#rh = 100*(exp((beta * d2m) / (gamma + d2m)) / exp((beta * t2m) / (gamma + t2m)))
-
-df <- mutate(df, rh = 100*(exp((beta * d2m) / (gamma + d2m)) / exp((beta * t2m) / (gamma + t2m))))
-
-
-#-----2. calculate lightning strike rate (km-2 hr-1) from daily strike count-----
+#-----1. calculate lightning strike rate (km-2 hr-1) from daily strike count-----
 
 #convert points to raster and set crs
 
@@ -70,9 +59,7 @@ map + geom_point(data=points, aes(x=lon, y=lat, col=as.factor(area)))
 #calculate lightning strike rate (km-2 hr-1)
 df <- mutate(df, strike_rate_hourly = strikes/area/24)
 
-points <- filter(df, date=="2008-06-01")
-
-ggplot() + geom_point(data=points, aes(x=cxp, y=strike_rate_hourly, alpha=0.1)) + 
+ggplot() + geom_point(data=df, aes(x=cxp, y=strike_rate_hourly, alpha=0.1)) + 
   xlab(expression(CAPE~x~Precip~(W~m^-2))) +
   ylab(expression(Lightning~flash~rate~(number~per~km^2~per~hour))) + 
   ggtitle("2005-2010 n=1,185,331") +
@@ -170,6 +157,11 @@ summary_sp <- df_summer %>%
   group_by(across(all_of(cols))) %>% 
   summarize(sp_monthly_mean = mean(sp), .groups = 'drop')
 
+#rh
+summary_rh <- df_summer %>% 
+  group_by(across(all_of(cols))) %>% 
+  summarize(rh_monthly_mean = mean(rh), .groups = 'drop')
+
 #tmin
 summary_tmin <- df_summer %>% 
   group_by(across(all_of(cols))) %>% 
@@ -190,6 +182,7 @@ summary_df <- merge(summary_df, summary_t2m, by=cols)
 summary_df <- merge(summary_df, summary_i10fg, by=cols)
 summary_df <- merge(summary_df, summary_msdwswrf, by=cols)
 summary_df <- merge(summary_df, summary_sp, by=cols)
+summary_df <- merge(summary_df, summary_rh, by=cols)
 summary_df <- merge(summary_df, summary_tmin, by=cols)
 summary_df <- merge(summary_df, summary_tmax, by=cols)
 head(summary_df)
@@ -204,7 +197,7 @@ ggplot() + geom_point(data=summary_df, aes(x=cxp_monthly_mean, y=mean_strike_rat
 
 hist(summary_df$mean_strike_rate)
 hist(summary_df$cxp_monthly_mean)
+hist(summary_df$rh_monthly_mean)
 
-
-
+write.csv(summary_df, "/raid/cuden/data/era5_vaisalaLightning_monthlySummaries_2005-2010_NEclip.csv")
 

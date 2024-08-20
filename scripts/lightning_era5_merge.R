@@ -7,7 +7,10 @@ library(dplyr)
 
 l <- read.csv("/raid/cuden/data/2004-20010_vaisala_lightning_era5Grid.csv")[,2:5]
 d1 <- read.csv("/raid/cuden/data/era5_precip_cape_cxp_2005-2010_dailySummaries.csv")
-d2 <- read.csv("/raid/cuden/data/era5_d2m_t2m_i10fg_msdwswrf_sp_2005-2010_dailySummaries.csv")
+d2 <- read.csv('/raid/cuden/data/era5_d2m_t2m_i10fg_msdwswrf_sp_rh_2005-2010_dailySummaries.csv')
+
+hist(d2$t2m)
+hist(d2$rh)
 
 str(l)
 str(d1)
@@ -27,7 +30,7 @@ ggplot() + geom_point(data=d2_day, aes(x=longitude, y=latitude, col=t2m))
 
 #rename columns
 colnames(d1) <- c("date","lat","lon","cape","mtpr","cxp")
-colnames(d2) <- c("date","lat","lon","d2m","t2m","i10fg", "msdwswrf", "sp", "tmin", "tmax")
+colnames(d2) <- c("date","lat","lon","d2m","t2m","i10fg", "msdwswrf", "sp", "rh", "tmin", "tmax")
 
 #merge by lat lon date
 d <- merge(l, d1, by=c("date", "lon", "lat"))

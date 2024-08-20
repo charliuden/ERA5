@@ -47,18 +47,8 @@ df["rh"] = (
     100*(np.exp((beta * df.d2m) / (gamma + df.d2m)) / np.exp((beta * df.t2m) / (gamma + df.t2m)))
 )
 
-#𝑅𝐻≈100−5(𝑇−𝑇𝐷)
-
-df["rh_2"] = (
-    100 - 5*(df.t2m - df.d2m)
-)
-
-df["rh_3"] = (
-    100 * np.exp((gamma * beta * (df.d2m - df.t2m))/((gamma + df.t2m) * (gamma + df.d2m)))
-)
-
 #caluclate daily mean for each variable by date, lat, lon
-df_summary = df.groupby(['date', 'latitude','longitude'])[['d2m', 't2m', 'i10fg', 'msdwswrf', 'sp', 'rh', 'rh_2', 'rh_3']].mean()
+df_summary = df.groupby(['date', 'latitude','longitude'])[['d2m', 't2m', 'i10fg', 'msdwswrf', 'sp', 'rh']].mean()
 #print(df_summary)
 
 #calculate daily min and max temperature

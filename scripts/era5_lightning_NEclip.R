@@ -7,13 +7,8 @@ library(ggplot2)
 library(dplyr)
 
 df <- read.csv("/raid/cuden/data/era5DailySummaries_vaisalaLightningDailyCounts_2005-2010.csv")#[,2:7]
-df <- df[,2:15]
+df <- df[,2:16]
 grid <- read.csv("/raid/cuden/data/era5_grid_NE_clip.csv")[,2:3]
-
-head(df)
-
-#colnames(df)[2] <- "lat"
-#colnames(df)[3] <- "lon"
 
 plot(grid$lon, grid$lat)
 
